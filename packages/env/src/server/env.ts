@@ -1,21 +1,15 @@
-import { dirname, resolve } from "node:path";
 import process from "node:process";
-import { fileURLToPath } from "node:url";
 
-import { config } from "@dotenvx/dotenvx";
 import { createEnv } from "@t3-oss/env-core";
 import { isProduction } from "std-env";
 import { z } from "zod";
+
+import "#@/init";
 
 console.debug("⏳ [ENV_SERVER] Loading environment variables...", {
   SOURCE_COMMIT: process.env.SOURCE_COMMIT,
   VITE_SERVER_URL: process.env.VITE_SERVER_URL,
   VITE_WEB_URL: process.env.VITE_WEB_URL,
-});
-
-config({
-  ignore: ["MISSING_ENV_FILE"],
-  path: resolve(dirname(fileURLToPath(import.meta.url)), "../../.env"),
 });
 
 export const ENV_SERVER = createEnv({

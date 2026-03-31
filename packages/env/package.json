@@ -2,6 +2,9 @@
   "name": "@tsu-stack/env",
   "private": true,
   "type": "module",
+  "imports": {
+    "#@/*": "./src/*.ts"
+  },
   "exports": {
     "./*": "./src/*.ts"
   },
