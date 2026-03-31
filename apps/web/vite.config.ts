@@ -17,12 +17,6 @@ import { paraglideVitePlugin } from "@tsu-stack/i18n/vite/plugin";
 
 import { type FileRouteTypes } from "@/routeTree.gen";
 
-console.debug(
-  new URL(ENV_WEB_ISOMORPHIC.VITE_WEB_URL).pathname,
-  new URL(ENV_WEB_ISOMORPHIC.VITE_WEB_URL),
-  ENV_WEB_SERVER.NODE_ENV,
-);
-
 /**
  * IMPORTANT: We define this explicitly here instead of crawling from the root (/) because
  * crawling can sometimes miss i18n routes that are not directly linked from the root.
