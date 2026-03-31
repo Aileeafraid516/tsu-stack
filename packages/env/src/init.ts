@@ -4,7 +4,9 @@ import { fileURLToPath } from "node:url";
 import { config } from "@dotenvx/dotenvx";
 
 (() => {
-  config({
-    path: resolve(dirname(fileURLToPath(import.meta.url)), "../.env"),
-  });
+  if (typeof window === "undefined") {
+    config({
+      path: resolve(dirname(fileURLToPath(import.meta.url)), "../.env"),
+    });
+  }
 })();
