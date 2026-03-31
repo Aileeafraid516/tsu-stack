@@ -7,7 +7,7 @@ export function Image(props: WrapperImageProps) {
     <RawImage
       {...props}
       siteBaseUrl={ENV_WEB_ISOMORPHIC.VITE_WEB_URL}
-      imgProxyBaseUrl={undefined}
+      imgProxyBaseUrl={ENV_WEB_ISOMORPHIC.VITE_IMGPROXY_URL}
     />
   );
 }
