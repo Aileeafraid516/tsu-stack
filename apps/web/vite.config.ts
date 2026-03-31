@@ -17,6 +17,12 @@ import { paraglideVitePlugin } from "@tsu-stack/i18n/vite/plugin";
 
 import { type FileRouteTypes } from "@/routeTree.gen";
 
+console.debug(
+  new URL(ENV_WEB_ISOMORPHIC.VITE_WEB_URL).pathname,
+  new URL(ENV_WEB_ISOMORPHIC.VITE_WEB_URL),
+  ENV_WEB_SERVER.NODE_ENV,
+);
+
 /**
  * IMPORTANT: We define this explicitly here instead of crawling from the root (/) because
  * crawling can sometimes miss i18n routes that are not directly linked from the root.
@@ -117,16 +123,15 @@ export default defineConfig({
       basePath: new URL(ENV_WEB_ISOMORPHIC.VITE_WEB_URL).pathname,
     }),
     /** @see {@link https://tanstack.com/start/latest/docs/framework/react/guide/hosting} */
-    ENV_WEB_SERVER.NODE_ENV === "production" &&
-      nitro({
-        baseURL: new URL(ENV_WEB_ISOMORPHIC.VITE_WEB_URL).pathname,
-        /**
-         * We need to add this or else we will get `Error: Cannot find module 'react'` during prod.
-         * FIXME: I haven't found a fix or related issue yet, but this is where I got the idea to trace the deps:
-         * @see {@link https://github.com/nuxt/nuxt/issues/20773}
-         */
-        traceDeps: ["react"],
-      }),
+    nitro({
+      baseURL: new URL(ENV_WEB_ISOMORPHIC.VITE_WEB_URL).pathname,
+      /**
+       * We need to add this or else we will get `Error: Cannot find module 'react'` during prod.
+       * FIXME: I haven't found a fix or related issue yet, but this is where I got the idea to trace the deps:
+       * @see {@link https://github.com/nuxt/nuxt/issues/20773}
+       */
+      traceDeps: ["react"],
+    }),
     viteReact(),
     /** @see {@link https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md#react-compiler} */
     babel({
