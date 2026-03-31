@@ -1,4 +1,4 @@
-# [tsu!stack](https://tsu-stack.tsu.moe/web/)
+# [tsu!stack](https://tsu-stack.tsu.moe/)
 
 <h1 align="center">
     <img width="120" height="120" src="https://github.com/tsu-moe/tsu-stack/blob/main/apps/web/public/logo192.png?raw=true" alt="tsu!stack Logo"><br>
@@ -318,6 +318,11 @@ However, the benefit is singular deployments and lower memory usage for websites
 
 - There is a hydration error when navigating to an i18n subpath like `/de`, but it subsides in subsequent navigations.
   - Need to investigate further, but otherwise, I haven't encountered any app-breaking bugs with it.
+
+- `robots.txt` [needs to be at the root of the domain](https://developers.google.com/search/docs/crawling-indexing/robots/intro) to be detected by search engines (ie. `example.com/robots.txt`), but since the web app is served on a subpath (ie. `example.com/web`), you need to set up a redirect from `example.com/robots.txt` to `example.com/web/robots.txt` in order for it to be detected.
+  - Other than that, you may need to set up a root sitemap index that links to as many sitemaps for every app you deploy in multiple subpaths.
+    - At the moment, the `__root.tsx` points to the subpath-specific sitemap, so you may want to consider pointing it to the root if you decide to opt into that architecture.
+  - Alternatively, you can simply deploy the web app in the root so that the files are hosted in `example.com/robots.txt` and `example.com/sitemap.xml` instead of `example.com/web/robots.txt` and `example.com/web/sitemap.xml`.
 
 ## Contributing
 

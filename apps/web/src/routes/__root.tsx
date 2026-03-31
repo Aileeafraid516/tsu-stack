@@ -71,7 +71,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
         },
         { content: appConfig.site.description, name: "description" },
         // Open Graph
-        { content: appConfig.site.shortName, property: "og:title" },
+        { content: appConfig.site.longName, property: "og:title" },
         { content: appConfig.site.description, property: "og:description" },
         {
           content: `${ENV_WEB_ISOMORPHIC.VITE_WEB_URL}/og/index.png`,

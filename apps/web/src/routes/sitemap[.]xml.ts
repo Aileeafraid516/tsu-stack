@@ -76,15 +76,15 @@ const DOUBLE_SLASH_REGEX = /([^:]\/)\/+/g;
 function normalizeUrl(baseUrl: string, basePath: string, path: string): string {
   // Remove trailing slash from baseUrl
   const cleanBaseUrl = baseUrl.replace(BASE_PATH_REGEX, "");
-  // Remove trailing slash from basePath and ensure it starts with slash
+  // Ensure basePath starts with a slash and remove trailing slashes
   const cleanBasePath = basePath
     ? `/${basePath.replace(BASE_PATH_REGEX, "").replace(PATH_REGEX, "")}`
     : "";
-  // Ensure path starts with single slash and remove trailing slashes
+  // Ensure path starts with a single slash and remove trailing slashes
   const cleanPath = `/${path.replace(PATH_REGEX, "").replace(BASE_PATH_REGEX, "")}`;
   // Combine and remove any double slashes
   const url = `${cleanBaseUrl}${cleanBasePath}${cleanPath}`.replace(DOUBLE_SLASH_REGEX, "$1");
-  // Remove trailing slash from final URL
+  // Ensure the final URL includes the basePath and remove trailing slash
   return url.replace(BASE_PATH_REGEX, "");
 }
 
