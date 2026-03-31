@@ -23,7 +23,10 @@
 </p>
 
 <p align="center">
-  <a href="http://tsu-stack.tsu.moe/web" target="_blank">🌐 Live Demo (with Dockerfiles)</a> | <a href="http://tsu-stack-coolify.tsu.moe/web" target="_blank">🌐 Live Demo (with Coolify Docker Compose)</a>
+  🌐 Live Demo Deployments:
+  <a href="http://tsu-stack.tsu.moe" target="_blank">Dockerfile</a> |
+  <a href="http://tsu-stack-coolify.tsu.moe" target="_blank">Docker Compose</a> |
+  <a href="http://tsu-stack-merged.tsu.moe" target="_blank">Merged Web + Server with Dockerfile</a> (<a href="https://github.com/tsu-moe/tsu-stack/tree/variant/merged" target="_blank">see branch</a>)
 </p>
 
 ## Table of Contents
@@ -130,7 +133,7 @@ Here is a non-exhaustive list of the main technologies used in this project, alo
    - **Server**: `http://localhost:5000/server`
 
 > [!TIP]
-> Run `vp run fix` to lint, format, and type-check your code. The pre-commit hook runs automatically on every commit.
+> Run `vp run fix` to lint, format, and type-check your code. This is also automatically run when you do `git commit`.
 
 ### Running with Docker Locally
 
@@ -152,7 +155,7 @@ Coolify can be used to deploy the server and web applications. Choose a strategy
 
 #### Option 1: Separate Dockerfiles
 
-> [!NOTE]
+> [!WARNING]
 > This approach retains rolling updates in Coolify and has minimal downtime, but it is harder to scale compared to Docker Compose.
 
 ##### Server Deployment
@@ -173,9 +176,6 @@ Coolify can be used to deploy the server and web applications. Choose a strategy
 Finally, set any required [environment variables](#environment-variables) in the "Environment Variables" tab for each application and press the "Deploy" button to start the deployment process.
 
 #### Option 2: Docker Compose
-
-> [!NOTE]
-> You can scale services using replicas - e.g. `docker-compose up --scale server=3` for the server.
 
 1. When creating a new application in Coolify, select "Private Repository (with GitHub App)" and select your repository with your tsu-stack app.
 2. Next, change the "Build Pack" to "Docker Compose" and set the "Docker Compose Location" to `/docker-compose.coolify.yaml`.
@@ -224,6 +224,9 @@ For the web app, use the following environment variables:
 
 ## Merging Server to Web App
 
+> [!TIP]
+> An example can be found in the [`variant/merged`](https://github.com/tsu-moe/tsu-stack/compare/variant/merged) branch. You can check [this commit](https://github.com/tsu-moe/tsu-stack/commit/221a0b39bbcac1a378e9e56df0c532ddd53a7be2) to see the changes needed.
+
 Since Hono is built on web standards, you can mount the Hono App into the TanStack Start web server.
 
 ```json5
@@ -240,11 +243,12 @@ Since Hono is built on web standards, you can mount the Hono App into the TanSta
 Then we can import our app from the server package.
 
 ```ts
-// apps/web/src/routes/api/$index.tsx
+// apps/web/src/routes/server/$.ts
 import { createFileRoute } from "@tanstack/react-router";
+
 import { app } from "@tsu-stack/server";
 
-export const Route = createFileRoute("/api/$")({
+export const Route = createFileRoute("/server/$")({
   server: {
     handlers: {
       GET: ({ request }) => {
@@ -261,8 +265,9 @@ export const Route = createFileRoute("/api/$")({
 
 Then merge your web environment variables with the server ones and make sure `VITE_SERVER_URL` points to the web domain's subpath.
 
-```bash
-VITE_SERVER_URL=http://localhost:3000/server
+```diff
+-VITE_SERVER_URL=http://localhost:5000/server
++VITE_SERVER_URL=http://localhost:3000/web/server
 VITE_WEB_URL=http://localhost:3000/web
 ```
 
@@ -273,12 +278,14 @@ You will also need to adjust the `getConnInfo` import to match your runtime envi
 +import { getConnInfo } from 'hono/vercel'
 ```
 
-> [!IMPORTANT]
+> [!WARNING]
 > `hono/vercel` works in any environment, but it may not have all the information needed for the logger middleware.
 
 Then lastly, remove the `serve()` call in `apps/server/src/index.ts` since the Hono app is now being served by the TanStack Start server.
 
 ```diff
+-import { serve } from "@hono/node-server";
+
 void (async () => {
   await migrateDatabase()
 
@@ -294,11 +301,18 @@ void (async () => {
 })()
 ```
 
-> [!NOTE]
+> [!WARNING]
 > You may want to refactor the logging middlewares since the TanStack Start server also logs incoming/outgoing requests, similar to the Hono app's middleware.
 
-> [!CAUTION]
+> [!WARNING]
 > You may also need to adjust your Docker Compose file and the `apps/web/Dockerfile` to include build args needed in the server app such as `DATABASE_URL` and handle other environment variables.
+
+Then, for local development purposes, you will need to exclude the server app from the `dev` script in the root workspace `package.json` since it's now merged into the web app.
+
+```diff
+-"dev": "concurrently --kill-others-on-fail --handle-input -n i18n,server,web -c yellow,blue,green \"vp run --filter=@tsu-stack/i18n dev\" \"vp run --filter=@tsu-stack/server dev\" \"wait-on tcp:5000 && vp run --filter=@tsu-stack/web dev\"",
++"dev": "concurrently --kill-others-on-fail --handle-input -n i18n,web -c yellow,green \"vp run --filter=@tsu-stack/i18n dev\" \"vp run --filter=@tsu-stack/web dev\"",
+```
 
 ### Resource Usage
 
