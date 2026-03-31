@@ -78,6 +78,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
           property: "og:image",
         },
         { content: "website", property: "og:type" },
+        { content: `${ENV_WEB_ISOMORPHIC.VITE_WEB_URL}/logo512.png`, property: "og:logo" },
         // Twitter Card
         { content: "summary_large_image", name: "twitter:card" },
         { content: appConfig.site.shortName, name: "twitter:title" },
