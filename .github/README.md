@@ -90,7 +90,8 @@ Here is a non-exhaustive list of the main technologies used in this project, alo
    ```bash
    git clone https://github.com/tsu-moe/tsu-stack.git
    cd tsu-stack
-   vp install
+   vp env install    # install Node.js version specified in package.json
+   vp install        # install all packages in the monorepo
    ```
 
 2. **Copy the environment files:**
