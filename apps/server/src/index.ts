@@ -33,6 +33,7 @@ app.use(
     origin: [new URL(ENV_SERVER.VITE_WEB_URL).origin],
     allowMethods: ["GET", "POST", "OPTIONS"],
     allowHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   }),
 );
 
