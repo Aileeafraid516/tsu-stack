@@ -4,8 +4,6 @@ import { createEnv } from "@t3-oss/env-core";
 import { isProduction } from "std-env";
 import { z } from "zod";
 
-import "#@/init";
-
 console.debug("⏳ [ENV_SERVER] Loading environment variables...", {
   SOURCE_COMMIT: process.env.SOURCE_COMMIT,
   VITE_SERVER_URL: process.env.VITE_SERVER_URL,

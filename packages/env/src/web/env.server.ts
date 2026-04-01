@@ -3,8 +3,6 @@ import process from "node:process";
 import { createEnv } from "@t3-oss/env-core";
 import { z } from "zod";
 
-import "#@/init";
-
 console.debug("⏳ [ENV_WEB_SERVER] Loading environment variables...", {
   SOURCE_COMMIT: process.env.SOURCE_COMMIT,
 });

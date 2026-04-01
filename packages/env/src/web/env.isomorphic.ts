@@ -2,8 +2,6 @@ import { createEnv } from "@t3-oss/env-core";
 import { isProduction } from "std-env";
 import { z } from "zod";
 
-import "#@/init";
-
 console.debug("⏳ [ENV_WEB_ISOMORPHIC] Loading environment variables...", {
   VITE_SERVER_URL: (import.meta.env ?? process.env).VITE_SERVER_URL,
   VITE_WEB_URL: (import.meta.env ?? process.env).VITE_WEB_URL,
