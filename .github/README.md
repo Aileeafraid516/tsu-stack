@@ -307,13 +307,6 @@ void (async () => {
 > [!WARNING]
 > You may also need to adjust your Docker Compose file and the `apps/web/Dockerfile` to include build args needed in the server app such as `DATABASE_URL` and handle other environment variables.
 
-Then, for local development purposes, you will need to exclude the server app from the `dev` script in the root workspace `package.json` since it's now merged into the web app.
-
-```diff
--"dev": "concurrently --kill-others-on-fail --handle-input -n i18n,server,web -c yellow,blue,green \"vp run --filter=@tsu-stack/i18n dev\" \"vp run --filter=@tsu-stack/server dev\" \"wait-on tcp:5000 && vp run --filter=@tsu-stack/web dev\"",
-+"dev": "concurrently --kill-others-on-fail --handle-input -n i18n,web -c yellow,green \"vp run --filter=@tsu-stack/i18n dev\" \"vp run --filter=@tsu-stack/web dev\"",
-```
-
 ### Resource Usage
 
 When mounting the Hono app into the TanStack Start web server, you will save the resources of running a separate Node.js server.
