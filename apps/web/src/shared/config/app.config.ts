@@ -20,8 +20,7 @@ export const appConfig = Object.freeze({
       "An opinionated Vite Plus (Vite+) monorepo featuring TanStack Start, Paraglide.js (i18n), Hono, oRPC, drizzle-orm, better-auth, and more.",
     emailSupport,
     jurisdictionCountry: "the Republic of the Philippines",
-    longName:
-      "Batteries-Included TanStack Start Monorepo Boilerplate Template | tsu!stack",
+    longName: "Batteries-Included TanStack Start Monorepo Boilerplate Template | tsu!stack",
     serverLocation: "Japan",
     shortName: "tsu!stack",
     url: ENV_WEB_ISOMORPHIC.VITE_WEB_URL,
