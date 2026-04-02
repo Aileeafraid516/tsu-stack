@@ -23,10 +23,11 @@
 </p>
 
 <p align="center">
-  🌐 Live Demo Deployments:
-  <a href="http://tsu-stack.tsu.moe" target="_blank">Dockerfile</a> |
-  <a href="http://tsu-stack-coolify.tsu.moe" target="_blank">Docker Compose</a> |
-  <a href="http://tsu-stack-merged.tsu.moe" target="_blank">Merged Web + Server with Dockerfile</a> (<a href="https://github.com/tsu-moe/tsu-stack/tree/variant/merged" target="_blank">see branch</a>)
+  <strong>✨ Live Demo Deployments ✨</strong><br />
+  <a href="http://tsu-stack.tsu.moe" target="_blank">Dockerfile (Coolify)</a><br>
+  <a href="http://tsu-stack-coolify.tsu.moe" target="_blank">Docker Compose (Coolify)</a><br>
+  <a href="http://tsu-stack-merged.tsu.moe" target="_blank">Merged Web + Server with Dockerfile (Coolify)</a> [<a href="https://github.com/tsu-moe/tsu-stack/tree/variant/merged" target="_blank">see branch</a>]<br>
+  <a href="https://tsu-stack.tsu-moe.workers.dev" target="_blank">Merged Web + Server (Cloudflare Workers)</a> [<a href="https://github.com/tsu-moe/tsu-stack/tree/variant/merged-cloudflare" target="_blank">see branch</a>]
 </p>
 
 ## Table of Contents
@@ -42,6 +43,7 @@
       - [Server Deployment](#server-deployment)
       - [Web Deployment](#web-deployment)
     - [Option 2: Docker Compose](#option-2-docker-compose)
+  - [Cloudflare Workers](#cloudflare-workers)
   - [Deploying to Other Platforms](#deploying-to-other-platforms)
   - [Subpath Support](#subpath-support)
 - [Environment Variables](#environment-variables)
@@ -188,6 +190,26 @@ Finally, set any required [environment variables](#environment-variables) in the
 
 > [!CAUTION]
 > Ensure that the `Strip Prefixes` option is unchecked in the `Advanced` settings to avoid issues with custom base paths.
+
+### Cloudflare Workers
+
+You will need to use the `@cloudflare/vite-plugin` adapter instead of `nitro`. See [this commit](https://github.com/tsu-moe/tsu-stack/commit/644ceb10a47836d8a3eb6f23c0b664e20207a9e0) for example changes.
+
+Then, you will need to switch to using a singleton `db` instance instead of a connection pool in the server app since Cloudflare Workers do not support long-lived connections. See [this commit](https://github.com/tsu-moe/tsu-stack/commit/8d6cf54b52e430ac6b3f840bbf5eecec040238b3) for example changes.
+
+You'll need to set the secrets manually in the Cloudflare dashboard before running the deployment commands.
+
+Finally, you can deploy by running the following command in the `apps/web` directory:
+
+```bash
+pnpm wrangler login # authenticate with your Cloudflare account
+cp packages/env/.env apps/web/.env # copy the shared env variables to the web app's env file for wrangler to read them
+cd apps/web # make sure you're in the web app directory since that's where the Cloudflare Worker entry point is
+pnpm wrangler deploy # deploys to your Cloudflare account
+```
+
+> [!CAUTION]
+> This repo does not have automatic GitHub CI/CD for the Cloudflare branch just yet, so you'll have to manually deploy with the `wrangler` CLI for now.
 
 ### Deploying to Other Platforms
 
