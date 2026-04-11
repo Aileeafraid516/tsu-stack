@@ -125,7 +125,7 @@ export const openApiHandler = new OpenAPIHandler(appRouter, {
           },
         ],
       },
-      specPath: "/spec.json",
+      specPath: "/docs/spec.json",
     }),
     new RethrowHandlerPlugin({
       filter: (error) => !(error instanceof ORPCError),
